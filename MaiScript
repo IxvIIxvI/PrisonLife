@@ -1,0 +1,213 @@
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+--https://github.com/shlexware/Rayfield/blob/main/Documentation.md
+
+local Window = Rayfield:CreateWindow({
+	Name = "Prison Life X",
+	LoadingTitle = "Prison Life X is Now Loading...",
+	LoadingSubtitle = "By Ixvi",
+	ConfigurationSaving = {
+		Enabled = true,
+		FolderName = "PrisonLifeX", -- Create a custom folder for your hub/game
+		FileName = "PrisonLifeXFolder"
+	},
+        Discord = {
+        	Enabled = true,
+        	Invite = "ixvi", -- The Discord invite code, do not include discord.gg/
+        	RememberJoins = false -- Set this to false to make them join the discord every time they load it up
+        },
+})
+
+local MainTab = Window:CreateTab("Main", 4483362458) -- Title, Image
+local KillAuraSection = MainTab:CreateSection("KillAura")
+
+
+
+
+local Plr = game.Players.LocalPlayer
+local Plrs = game:GetService("Players")
+
+
+local KillAuraToggle = MainTab:CreateToggle({
+	Name = "KillAura",
+	CurrentValue = false,
+	Flag = "KillAuraToggle", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+        if Value then
+            getgenv().Aura = true;
+            while wait() do
+                if getgenv().Aura == true then
+                    for i, v in pairs(Plrs:GetChildren()) do
+                        if v.UserId == Plr.UserId then
+                            continue
+                        else
+                            game:GetService("ReplicatedStorage").meleeEvent:FireServer(v)
+                        wait(KillAuraDelay)
+                        end
+                    end
+                end
+            end
+        else
+            getgenv().Aura = false;
+        end
+	end,
+})
+
+local KillAuraSlider = MainTab:CreateSlider({
+	Name = "KillAura Delay",
+	Range = {0, 10},
+	Increment = 1,
+	Suffix = "",
+	CurrentValue = 1,
+	Flag = "KillAuraSlider", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(KillAuraValue)
+        KillAuraDelay = val
+	end,
+})
+
+local SpeedSection = MainTab:CreateSection("Speed")
+
+local Speed = MainTab:CreateSlider({
+	Name = "Speed",
+	Range = {16, 100},
+	Increment = 1,
+	Suffix = "",
+	CurrentValue = 16,
+	Flag = "SpeedToggle", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(SpeedValue)
+        Plr.Character.Humanoid.WalkSpeed = SpeedValue
+	end,
+})
+
+local GunGiverTab = Window:CreateTab("Gun", 4483362458) -- Title, Image
+local GunSection = GunGiverTab:CreateSection("Gun Giver")
+
+local Ak47Giver = GunGiverTab:CreateButton({
+	Name = "Ak-47 Giver",
+	Callback = function()
+		workspace.Remote.ItemHandler:InvokeServer(workspace.Prison_ITEMS.giver["AK-47"].ITEMPICKUP)
+	end,
+})
+
+local M9Giver = GunGiverTab:CreateButton({
+	Name = "M9 Giver",
+	Callback = function()
+		workspace.Remote.ItemHandler:InvokeServer(workspace.Prison_ITEMS.giver["M9"].ITEMPICKUP)
+	end,
+})
+
+local Remington870Giver = GunGiverTab:CreateButton({
+	Name = "Remington 870 Giver",
+	Callback = function()
+		workspace.Remote.ItemHandler:InvokeServer(workspace.Prison_ITEMS.giver["Remington 870"].ITEMPICKUP)
+	end,
+})
+local M4A1Giver = GunGiverTab:CreateButton({
+	Name = "M4A1 Giver",
+	Callback = function()
+		workspace.Remote.ItemHandler:InvokeServer(workspace.Prison_ITEMS.giver["M4A1"].ITEMPICKUP)
+	end,
+})
+
+local GunExploitSection = GunGiverTab:CreateSection("Gun Exploits")
+
+local Paragraph = GunGiverTab:CreateParagraph({Title = "Gun Exploit Info", Content = "This Will Be Added Later On."})
+
+
+
+
+local TeleportTab = Window:CreateTab("Teleport", 4483362458) -- Title, Image
+local PlayerTpSection = TeleportTab:CreateSection("Teleport")
+
+local GotoPlayerToggle = TeleportTab:CreateInput({
+	Name = "Teleport To A Player",
+	PlaceholderText = "Player Name Here",
+	RemoveTextAfterFocusLost = false,
+	Callback = function(GotoPlayerInput)
+        Plr.Character.HumanoidRootPart.CFrame = game.Players[GotoPlayerInput].Character.HumanoidRootPart.CFrame
+	end,
+})
+local CriminalBaseTp = TeleportTab:CreateButton({
+	Name = "Teleport Criminal Base",
+	Callback = function()
+		Plr.Character.HumanoidRootPart.CFrame = CFrame.new(-975.896118, 106.223793, 2070.50464)
+        Plr.Character.HumanoidRootPart.CFrame = Plr.Character.HumanoidRootPart.CFrame + Vector3.new(0,10,0)
+	end,
+})
+
+local PoliceBaseTp = TeleportTab:CreateButton({
+	Name = "Teleport Police Base",
+	Callback = function()
+		Plr.Character.HumanoidRootPart.CFrame = CFrame.new(838.227051, 99.9899826, 2276.02246)
+        Plr.Character.HumanoidRootPart.CFrame = Plr.Character.HumanoidRootPart.CFrame + Vector3.new(0,10,0)
+	end,
+})
+
+local JailBaseTp = TeleportTab:CreateButton({
+	Name = "Teleport To Jail",
+	Callback = function()
+		Plr.Character.HumanoidRootPart.CFrame = CFrame.new(916.619385, 99.9899673, 2419.4585)
+        Plr.Character.HumanoidRootPart.CFrame = Plr.Character.HumanoidRootPart.CFrame + Vector3.new(0,10,0)
+	end,
+})
+
+--setclipboard(tostring(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame))
+
+
+local VisualTab = Window:CreateTab("Visuals", 4483362458) -- Title, Image
+local VisualSection = VisualTab:CreateSection("Esp")
+
+local EspToggle = VisualTab:CreateToggle({
+	Name = "Esp - Outline",
+	CurrentValue = false,
+	Flag = "EspToggle", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(EspValue)
+        if EspValue then
+            for i, v in pairs(Plrs:GetChildren()) do
+                if v.UserId == Plr.UserId then
+                    continue
+                else
+                    local EspLocaltion = v.Character
+                    local RenderESP = Instance.new("Highlight", EspLocaltion)
+                    RenderESP.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                    RenderESP.Enabled = true
+                    RenderESP.Name = "Highlight"
+                    RenderESP.FillColor = Color3.new(0,0,0)
+                    RenderESP.FillTransparency = 1
+                    RenderESP.OutlineColor = Color3.new(255,255,255)
+                    RenderESP.OutlineTransparency = 0
+                end
+            end
+        else
+            for i, v in pairs(Plrs:GetChildren()) do
+                if v.Character:FindFirstChild("Highlight") then
+                    v.Character.Highlight:Destroy()
+                else
+                    continue
+                end
+            end
+        end
+	end,
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
